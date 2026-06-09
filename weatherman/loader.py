@@ -1,6 +1,7 @@
-from pathlib import Path
 import os
 from weatherman.models import LoaderClass
+from  .parser import parse
+
 
 #Three whitelines after imports skipped to fulfill PEP-8 standard
 def load_directory(directory_path:str, arguments_types:[str],timelines:[str])->None:
@@ -12,6 +13,8 @@ def load_directory(directory_path:str, arguments_types:[str],timelines:[str])->N
     print(request.directory_path)
     print(request.arguments_types)
     print(request.timelines)
+
+    parse(request.directory_path,request.arguments_types,request.timelines)
     # cwd=os.getcwd()
     # root_directory=cwd.parent
     # directory_path=Path(directory_path)
