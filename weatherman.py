@@ -1,5 +1,5 @@
 import sys
-from weatherman.loader import load_file
+from weatherman.loader import load_directory
 from time import sleep
 
 #Three whitelines after imports skipped to fulfill PEP 8 standard
@@ -14,10 +14,27 @@ def main()->None:
         print("No command line arguments passed...")
 
     print(sys.argv)
+
+    directory_path=sys.argv[1]
+    argument_types=[]
+    timelines=[]
+
+    if(len(sys.argv)<4):
+        print("Minimum Required arguments' length is 4")
+        print("Valid Request Format Example: weatherman.py /path/to/files-dir -c 2011/3")    
+    else:
+        for i in range(2,len(sys.argv)):
+            if i%2==0:
+                argument_types.append(sys.argv[i])
+            else:
+                timelines.append(sys.argv[i])
+
     try: 
-        load_file(sys.argv[1])
-    except:
-        print("Error loading file,either file not exists or invalid argument")
+        load_directory(directory_path, argument_types, timelines)
+    except Exception as e:
+        print("Error loading file,either file not exists or invalid argument: ",e)
+        print("Valid Request Format Example: weatherman.py /path/to/files-dir -c 2011/3",e)
+
 
 if __name__=="__main__":
     for i in range(14):
