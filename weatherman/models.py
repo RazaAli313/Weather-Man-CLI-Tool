@@ -38,7 +38,7 @@ class MonthlyReport:
 
 
 @dataclass
-class LoaderClass:
+class Loader:
     """Data structure for loader configuration."""
     directory_path: str
     arguments_types: list[str]

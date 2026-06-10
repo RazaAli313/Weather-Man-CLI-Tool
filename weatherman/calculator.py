@@ -1,5 +1,6 @@
 from weatherman.models import WeatherReading, YearlyReport, MonthlyReport
 from weatherman import report_generator
+from weatherman.app_logger import logger
 from typing import List
 
 
@@ -20,34 +21,22 @@ def calculate_yearly_report(readings: list[WeatherReading],
 
     result = None
 
-    if yearly_readings:
-        highest_temp = -999
-        highest_temp_day = ""
-        lowest_temp = 999
-        lowest_temp_day = ""
-        max_humidity = -1
-        max_humidity_day = ""
+    valid_max_temp_readings = [reading for reading in yearly_readings if reading.max_temp is not None]
+    valid_min_temp_readings = [reading for reading in yearly_readings if reading.min_temp is not None]
+    valid_max_humidity_readings = [reading for reading in yearly_readings if reading.max_humidity is not None]
 
-        for reading in yearly_readings:
-            if reading.max_temp and reading.max_temp > highest_temp:
-                highest_temp = reading.max_temp
-                highest_temp_day = reading.date
-
-            if reading.min_temp and reading.min_temp < lowest_temp:
-                lowest_temp = reading.min_temp
-                lowest_temp_day = reading.date
-
-            if reading.max_humidity and reading.max_humidity > max_humidity:
-                max_humidity = reading.max_humidity
-                max_humidity_day = reading.date
+    if yearly_readings and valid_max_temp_readings and valid_min_temp_readings and valid_max_humidity_readings:
+        highest_temp_reading = max(valid_max_temp_readings, key=lambda reading: reading.max_temp)
+        lowest_temp_reading = min(valid_min_temp_readings, key=lambda reading: reading.min_temp)
+        max_humidity_reading = max(valid_max_humidity_readings, key=lambda reading: reading.max_humidity)
 
         result = YearlyReport(
-            highest_temp=highest_temp,
-            highest_temp_day=highest_temp_day,
-            lowest_temp=lowest_temp,
-            lowest_temp_day=lowest_temp_day,
-            max_humidity=max_humidity,
-            max_humidity_day=max_humidity_day
+            highest_temp=highest_temp_reading.max_temp,
+            highest_temp_day=highest_temp_reading.date,
+            lowest_temp=lowest_temp_reading.min_temp,
+            lowest_temp_day=lowest_temp_reading.date,
+            max_humidity=max_humidity_reading.max_humidity,
+            max_humidity_day=max_humidity_reading.date
         )
 
     return result
@@ -71,35 +60,15 @@ def calculate_monthly_report(readings: list[WeatherReading],
 
     result = None
 
-    if monthly_readings:
-        total_highest = 0
-        total_lowest = 0
-        total_humidity = 0
-        count_highest = 0
-        count_lowest = 0
-        count_humidity = 0
+    valid_max_temps = [reading.max_temp for reading in monthly_readings if reading.max_temp is not None]
+    valid_min_temps = [reading.min_temp for reading in monthly_readings if reading.min_temp is not None]
+    valid_mean_humidity = [reading.mean_humidity for reading in monthly_readings if reading.mean_humidity is not None]
 
-        for reading in monthly_readings:
-            if reading.max_temp:
-                total_highest += reading.max_temp
-                count_highest += 1
-
-            if reading.min_temp:
-                total_lowest += reading.min_temp
-                count_lowest += 1
-
-            if reading.mean_humidity:
-                total_humidity += reading.mean_humidity
-                count_humidity += 1
-
-        avg_highest = total_highest / count_highest if count_highest > 0 else 0
-        avg_lowest = total_lowest / count_lowest if count_lowest > 0 else 0
-        avg_humidity = total_humidity / count_humidity if count_humidity > 0 else 0
-
+    if monthly_readings and valid_max_temps and valid_min_temps and valid_mean_humidity:
         result = MonthlyReport(
-            avg_highest_temp=avg_highest,
-            avg_lowest_temp=avg_lowest,
-            avg_mean_humidity=avg_humidity,
+            avg_highest_temp=sum(valid_max_temps) / len(valid_max_temps),
+            avg_lowest_temp=sum(valid_min_temps) / len(valid_min_temps),
+            avg_mean_humidity=sum(valid_mean_humidity) / len(valid_mean_humidity),
             daily_readings=monthly_readings
         )
 

@@ -1,8 +1,33 @@
 from pathlib import Path
 from weatherman.calculator import calculate
+from weatherman.constants import (
+    DATE_INDEX,
+    MAX_TEMP_INDEX,
+    MEAN_TEMP_INDEX,
+    MIN_TEMP_INDEX,
+    MAX_HUMIDITY_INDEX,
+    MEAN_HUMIDITY_INDEX,
+    MIN_HUMIDITY_INDEX,
+    MIN_FIELD_COUNT,
+)
 from weatherman.models import WeatherReading
 from typing import Optional, List
 from calendar import month_abbr
+
+_MONTH_NAME_TO_NUMBER = {
+    name.lower(): index
+    for index, name in enumerate(month_abbr)
+    if name
+}
+
+
+def _parse_optional_int(value: str) -> Optional[int]:
+    parsed_value = None
+
+    if value:
+        parsed_value = int(value)
+
+    return parsed_value
 
 
 def parse_weather_line(line: str) -> Optional[WeatherReading]:
@@ -18,21 +43,21 @@ def parse_weather_line(line: str) -> Optional[WeatherReading]:
     parts = line.strip().split(',')
     reading = None
 
-    if len(parts) >= 10:
+    if len(parts) >= MIN_FIELD_COUNT:
         # Parse date (format: YYYY-M-D)
-        date_str = parts[0]
+        date_str = parts[DATE_INDEX]
         date_parts = date_str.split('-')
         year = int(date_parts[0])
         month = int(date_parts[1])
         day = int(date_parts[2])
 
         # Parse temperatures and humidity
-        max_temp = int(parts[1]) if parts[1] else None
-        mean_temp = int(parts[2]) if parts[2] else None
-        min_temp = int(parts[3]) if parts[3] else None
-        max_humidity = int(parts[7]) if parts[7] else None
-        mean_humidity = int(parts[8]) if parts[8] else None
-        min_humidity = int(parts[9]) if parts[9] else None
+        max_temp = _parse_optional_int(parts[MAX_TEMP_INDEX])
+        mean_temp = _parse_optional_int(parts[MEAN_TEMP_INDEX])
+        min_temp = _parse_optional_int(parts[MIN_TEMP_INDEX])
+        max_humidity = _parse_optional_int(parts[MAX_HUMIDITY_INDEX])
+        mean_humidity = _parse_optional_int(parts[MEAN_HUMIDITY_INDEX])
+        min_humidity = _parse_optional_int(parts[MIN_HUMIDITY_INDEX])
 
         reading = WeatherReading(
             date=date_str,
@@ -55,27 +80,43 @@ def _parse_year_month(year_month: str) -> tuple[str, Optional[int]]:
     parsed_month = None
 
     if '/' in year_month:
-        parts = year_month.split('/')
+        year_part, month_part = year_month.split('/', 1)
         try:
-            parsed_year = str(int(parts[0]))
-            parsed_month = int(parts[1])
+            parsed_year = str(int(year_part))
+            parsed_month = int(month_part)
         except ValueError:
-            parsed_year = parts[0]
+            parsed_year = year_part
 
     return parsed_year, parsed_month
 
 
-def _matches_year_month(file_name: str, target_year: str, target_month: Optional[int]) -> bool:
-    matches = False
+def _extract_year_month_from_file_name(file_name: str) -> tuple[Optional[str], Optional[int]]:
+    file_year = None
+    file_month = None
 
-    if target_year in file_name:
-        if target_month:
-            abbr = month_abbr[target_month]
-            matches = bool(abbr and abbr in file_name)
-        else:
-            matches = True
+    stem_parts = Path(file_name).stem.split('_')
+    if len(stem_parts) >= 3:
+        year_candidate = stem_parts[-2]
+        month_candidate = stem_parts[-1].lower()
+        if year_candidate.isdigit() and month_candidate in _MONTH_NAME_TO_NUMBER:
+            file_year = year_candidate
+            file_month = _MONTH_NAME_TO_NUMBER[month_candidate]
 
-    return matches
+    return file_year, file_month
+
+
+def _build_file_index(directory_path: Path) -> tuple[dict[str, list[Path]], dict[tuple[str, int], list[Path]]]:
+    files_by_year: dict[str, list[Path]] = {}
+    files_by_year_month: dict[tuple[str, int], list[Path]] = {}
+
+    for file_path in directory_path.iterdir():
+        file_year, file_month = _extract_year_month_from_file_name(file_path.name)
+        if file_year:
+            files_by_year.setdefault(file_year, []).append(file_path)
+            if file_month:
+                files_by_year_month.setdefault((file_year, file_month), []).append(file_path)
+
+    return files_by_year, files_by_year_month
 
 
 def _read_weather_file(file_path: Path) -> list[WeatherReading]:
@@ -92,13 +133,22 @@ def _read_weather_file(file_path: Path) -> list[WeatherReading]:
     return readings
 
 
-def _collect_readings(directory_path: Path, year_month: str) -> list[WeatherReading]:
+def _collect_readings(
+    files_by_year: dict[str, list[Path]],
+    files_by_year_month: dict[tuple[str, int], list[Path]],
+    year_month: str,
+) -> list[WeatherReading]:
     readings: list[WeatherReading] = []
     target_year, target_month = _parse_year_month(year_month)
 
-    for file_path in directory_path.iterdir():
-        if _matches_year_month(file_path.name, target_year, target_month):
-            readings.extend(_read_weather_file(file_path))
+    matching_files: list[Path] = []
+    if target_month is None:
+        matching_files = files_by_year.get(target_year, [])
+    else:
+        matching_files = files_by_year_month.get((target_year, target_month), [])
+
+    for file_path in matching_files:
+        readings.extend(_read_weather_file(file_path))
 
     return readings
 
@@ -114,10 +164,11 @@ def parse(directory_path: str, argument_types: List[str],
         year_months: List of year/month values corresponding to each flag
     """
     base_path = Path(directory_path)
+    files_by_year, files_by_year_month = _build_file_index(base_path)
     reports_count = min(len(argument_types), len(year_months))
 
     for index in range(reports_count):
-        file_readings = _collect_readings(base_path, year_months[index])
+        file_readings = _collect_readings(files_by_year, files_by_year_month, year_months[index])
         if file_readings:
             calculate(file_readings, argument_types[index], year_months[index])
 

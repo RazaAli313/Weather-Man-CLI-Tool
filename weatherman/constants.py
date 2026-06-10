@@ -1,6 +1,16 @@
 from enum import Enum
 
 
+DATE_INDEX = 0
+MAX_TEMP_INDEX = 1
+MEAN_TEMP_INDEX = 2
+MIN_TEMP_INDEX = 3
+MAX_HUMIDITY_INDEX = 7
+MEAN_HUMIDITY_INDEX = 8
+MIN_HUMIDITY_INDEX = 9
+MIN_FIELD_COUNT = 10
+
+
 class Color(Enum):
     # ANSI color codes
     RED = "\033[31m"

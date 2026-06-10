@@ -1,7 +1,8 @@
 from weatherman.models import YearlyReport, MonthlyReport
+from weatherman.app_logger import logger
 from weatherman.constants import Color
 
-color=Color()
+color = Color
 
 
 def print_yearly_report(report: YearlyReport) -> None:
@@ -65,15 +66,14 @@ def print_chart_report(report: MonthlyReport, year: int, month: int) -> None:
 
             # High temperature in red
             high_bar = "+" * max(0, reading.max_temp)
-            logger.info(f"{day_str} {color.color.RED}{high_bar}{color.RESET} {reading.max_temp}C")
+            logger.info(f"{day_str} {color.RED.value}{high_bar}{Color.RESET.value} {reading.max_temp}C")
 
             # Low temperature in blue
             low_bar = "+" * max(0, reading.min_temp)
-            logger.info.info(f"{day_str} {color.BLUE}{low_bar}{color.RESET} {reading.min_temp}C")
+            logger.info(f"{day_str} {color.BLUE.value}{low_bar}{Color.RESET.value} {reading.min_temp}C")
 
 
-def print_combined_chart_report(report: MonthlyReport, year: int, 
-                                month: int) -> None:
+def print_combined_chart_report(report: MonthlyReport, year: int, month: int) -> None:
     """
     logger.info combined chart with high and low temperature in one line (Task 5 - BONUS).
     
@@ -101,7 +101,7 @@ def print_combined_chart_report(report: MonthlyReport, year: int,
             blue_bar = "+" * min_val
             red_bar = "+" * max(0, max_val - min_val)
 
-            logger.info(f"{day_str} {color.BLUE}{blue_bar}{color.RESET}{color.RED}{red_bar}{color.RESET} {min_val}C - {max_val}C")
+            logger.info(f"{day_str} {color.BLUE.value}{blue_bar}{Color.RESET.value}{color.RED.value}{red_bar}{Color.RESET.value} {min_val}C - {max_val}C")
 
 
 def get_month_name(month: int) -> str:
