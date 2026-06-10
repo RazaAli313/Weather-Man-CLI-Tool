@@ -99,7 +99,7 @@ def calculate(readings: List[WeatherReading], argument_type: str,
         else:
             logger.info(f"No data found for {year}/{month}")
 
-    try:
+    
         if argument_type == "-e":
             year = int(year_month)
             report = calculate_yearly_report(readings, year)
@@ -118,7 +118,4 @@ def calculate(readings: List[WeatherReading], argument_type: str,
             _handle_monthly_action(readings, year_month, action_fn)
 
         else:
-            logger.info(f"Unknown argument type: {argument_type}")
-    except ValueError as e:
-        logger.info(f"Error parsing year_month {year_month}: {e}")
-
+            logger.info(f"Unknown argument type: {argument_type}"

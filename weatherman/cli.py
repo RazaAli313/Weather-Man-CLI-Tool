@@ -4,13 +4,13 @@ import argparse
 class AppendPair(argparse.Action):
     """Preserve the order of flag/value pairs as they are provided."""
 
-    def __call__(self, parser, namespace, values, option_string=None):
+    def __call__(self, parser, namespace, year_month_values, flag=None):
         if not hasattr(namespace, "argument_types"):
             setattr(namespace, "argument_types", [])
             setattr(namespace, "year_months", [])
 
-        namespace.argument_types.append(option_string)
-        namespace.year_months.append(values)
+        namespace.argument_types.append(flag)
+        namespace.year_months.append(year_month_values)
 
 
 def build_parser() -> argparse.ArgumentParser:

@@ -15,9 +15,7 @@ from typing import Optional, List
 from calendar import month_abbr
 
 _MONTH_NAME_TO_NUMBER = {
-    name.lower(): index
-    for index, name in enumerate(month_abbr)
-    if name
+    name.lower(): index for index, name in enumerate(month_abbr) if name
 }
 
 
