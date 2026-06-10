@@ -1,14 +1,12 @@
 from weatherman.models import YearlyReport, MonthlyReport
+from weatherman.constants import Color
 
-# ANSI color codes
-RED = "\033[31m"
-BLUE = "\033[34m"
-RESET = "\033[0m"
+color=Color()
 
 
 def print_yearly_report(report: YearlyReport) -> None:
     """
-    Print yearly weather report (Task 1).
+    logger.info yearly weather report (Task 1).
     
     Args:
         report: YearlyReport object
@@ -26,28 +24,28 @@ def print_yearly_report(report: YearlyReport) -> None:
     humidity_day = int(humidity_date[2])
     humidity_month = get_month_name(int(humidity_date[1]))
     
-    print(f"Highest: {report.highest_temp}C on {highest_month} {highest_day}")
-    print(f"Lowest: {report.lowest_temp}C on {lowest_month} {lowest_day}")
-    print(f"Humidity: {report.max_humidity}% on {humidity_month} {humidity_day}")
+    logger.info(f"Highest: {report.highest_temp}C on {highest_month} {highest_day}")
+    logger.info(f"Lowest: {report.lowest_temp}C on {lowest_month} {lowest_day}")
+    logger.info(f"Humidity: {report.max_humidity}% on {humidity_month} {humidity_day}")
 
 
 def print_monthly_report(report: MonthlyReport, year: int, month: int) -> None:
     """
-    Print monthly weather report (Task 2).
+    logger monthly weather report (Task 2).
     
     Args:
         report: MonthlyReport object
         year: Year
         month: Month
     """
-    print(f"Highest Average: {int(report.avg_highest_temp)}C")
-    print(f"Lowest Average: {int(report.avg_lowest_temp)}C")
-    print(f"Average Mean Humidity: {int(report.avg_mean_humidity)}%")
+    logger.info(f"Highest Average: {int(report.avg_highest_temp)}C")
+    logger.info(f"Lowest Average: {int(report.avg_lowest_temp)}C")
+    logger.info(f"Average Mean Humidity: {int(report.avg_mean_humidity)}%")
 
 
 def print_chart_report(report: MonthlyReport, year: int, month: int) -> None:
     """
-    Print chart report with separate high and low temperature bars (Task 3).
+    logger.info chart report with separate high and low temperature bars (Task 3).
     
     Args:
         report: MonthlyReport object
@@ -55,7 +53,7 @@ def print_chart_report(report: MonthlyReport, year: int, month: int) -> None:
         month: Month
     """
     month_name = get_month_name(month)
-    print(f"{month_name} {year}")
+    logger.info(f"{month_name} {year}")
     
     # Sort by day
     sorted_readings = sorted(report.daily_readings, key=lambda r: r.day)
@@ -67,17 +65,17 @@ def print_chart_report(report: MonthlyReport, year: int, month: int) -> None:
 
             # High temperature in red
             high_bar = "+" * max(0, reading.max_temp)
-            print(f"{day_str} {RED}{high_bar}{RESET} {reading.max_temp}C")
+            logger.info(f"{day_str} {color.color.RED}{high_bar}{color.RESET} {reading.max_temp}C")
 
             # Low temperature in blue
             low_bar = "+" * max(0, reading.min_temp)
-            print(f"{day_str} {BLUE}{low_bar}{RESET} {reading.min_temp}C")
+            logger.info.info(f"{day_str} {color.BLUE}{low_bar}{color.RESET} {reading.min_temp}C")
 
 
 def print_combined_chart_report(report: MonthlyReport, year: int, 
                                 month: int) -> None:
     """
-    Print combined chart with high and low temperature in one line (Task 5 - BONUS).
+    logger.info combined chart with high and low temperature in one line (Task 5 - BONUS).
     
     Args:
         report: MonthlyReport object
@@ -85,7 +83,7 @@ def print_combined_chart_report(report: MonthlyReport, year: int,
         month: Month
     """
     month_name = get_month_name(month)
-    print(f"{month_name} {year}")
+    logger.info(f"{month_name} {year}")
     
     # Sort by day
     sorted_readings = sorted(report.daily_readings, key=lambda r: r.day)
@@ -103,7 +101,7 @@ def print_combined_chart_report(report: MonthlyReport, year: int,
             blue_bar = "+" * min_val
             red_bar = "+" * max(0, max_val - min_val)
 
-            print(f"{day_str} {BLUE}{blue_bar}{RESET}{RED}{red_bar}{RESET} {min_val}C - {max_val}C")
+            logger.info(f"{day_str} {color.BLUE}{blue_bar}{color.RESET}{color.RED}{red_bar}{color.RESET} {min_val}C - {max_val}C")
 
 
 def get_month_name(month: int) -> str:

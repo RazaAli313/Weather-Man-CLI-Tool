@@ -1,5 +1,7 @@
 import sys
+import argparse
 from weatherman.loader import load_directory
+from weatherman.app_logger import logger
 from time import sleep
 
 
@@ -13,57 +15,66 @@ def main() -> None:
            weatherman.py /path/to/files-dir -c 2011/3
            weatherman.py /path/to/files-dir -c 2011/03 -a 2011/3 -e 2011
     """
-    if len(sys.argv) < 4:
-        print("Error: Minimum required arguments length is 4")
-        print("Valid Request Format Examples:")
-        print("  weatherman.py /path/to/files-dir -e 2002")
-        print("  weatherman.py /path/to/files-dir -a 2005/6")
-        print("  weatherman.py /path/to/files-dir -c 2011/3")
-        print("  weatherman.py /path/to/files-dir -c 2011/03 -a 2011/3 -e 2011")
-        return
+    logger.info("Starting...")
+    parser = argparse.ArgumentParser(
+        prog="weatherman.py",
+        description="Weather Man CLI Tool: generate reports from a directory of weather files",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
 
-    directory_path = sys.argv[1]
-    argument_types = []
-    timelines = []
+    class AppendPair(argparse.Action):
+        """Custom action that preserves the order of flags and their values."""
 
-    # Parse command-line arguments in pairs: -flag value
-    for i in range(2, len(sys.argv)):
-        if sys.argv[i].startswith('-') and i % 2 == 0:
-            argument_types.append(sys.argv[i])
-            if i + 1 < len(sys.argv) and not sys.argv[i + 1].startswith('-'):
-                timelines.append(sys.argv[i + 1])
-            else:
-                print(f"Error: Flag {sys.argv[i]} requires a value")
-                return
+        def __call__(self, parser, namespace, values, option_string=None):
+            if not hasattr(namespace, 'argument_types'):
+                setattr(namespace, 'argument_types', [])
+                setattr(namespace, 'year_months', [])
+            namespace.argument_types.append(option_string)
+            namespace.year_months.append(values)
 
-    if len(argument_types) == 0 or len(timelines) == 0:
-        print("Error: No valid flag-value pairs found")
+    parser.add_argument('directory_path', help='Path to directory containing weather files')
+    parser.add_argument('-e', metavar='YEAR', action=AppendPair, help='Yearly report for YEAR')
+    parser.add_argument('-a', metavar='YEAR/MONTH', action=AppendPair, help='Monthly report for YEAR/MONTH')
+    parser.add_argument('-c', metavar='YEAR/MONTH', action=AppendPair, help='Chart report for YEAR/MONTH')
+    parser.add_argument('-b', metavar='YEAR/MONTH', action=AppendPair, help='Combined chart report for YEAR/MONTH')
+
+    args = parser.parse_args()
+
+    directory_path = args.directory_path
+
+    argument_types = getattr(args, 'argument_types', [])
+    year_months = getattr(args, 'year_months', [])
+
+    if not argument_types or not year_months:
+        logger.info("Error: No flag-value pairs provided. See usage examples below:\n")
+        parser.logger.info_help()
         return
 
     try:
-        load_directory(directory_path, argument_types, timelines)
+        load_directory(directory_path, argument_types, year_months)
     except Exception as e:
-        print(f"Error loading files: {e}")
-        print("Ensure the directory path is correct and readable.")
+        logger.info(f"Error loading files: {e}")
+        logger.info("Ensure the directory path is correct and readable.")
 
+    logger.info("Terminating...")
 
 if __name__ == "__main__":
     # Welcome message with animation
     for i in range(14):
-        print("-", end="", flush=True)
+        logger.info("-", end="", flush=True)
         sleep(0.06)
 
     welcome_sentence = "Welcome to Weather Man CLI Tool"
     for word in welcome_sentence:
-        print(word, end="", flush=True)
+        logger.info(word, end="", flush=True)
         sleep(0.06)
 
     for i in range(14):
-        print("-", end="", flush=True)
+        logger.info("-", end="", flush=True)
         sleep(0.06)
 
-    print("\n\n")
+    logger.info("\n\n")
     sleep(1)
 
     main()
-    print("--------------------------------------\n\n")
+    logger.info("--------------------------------------\n\n")

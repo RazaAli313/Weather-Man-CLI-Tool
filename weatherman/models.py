@@ -42,5 +42,5 @@ class LoaderClass:
     """Data structure for loader configuration."""
     directory_path: str
     arguments_types: list[str]
-    timelines: list[str]
+    year_months: list[str]
     
