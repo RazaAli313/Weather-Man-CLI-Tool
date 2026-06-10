@@ -1,5 +1,5 @@
 from weatherman.models import LoaderClass
-from .parser import parse
+from weatherman.parser import parse
 from typing import List
 
 

@@ -1,4 +1,4 @@
-from .models import YearlyReport, MonthlyReport
+from weatherman.models import YearlyReport, MonthlyReport
 
 # ANSI color codes
 RED = "\033[31m"

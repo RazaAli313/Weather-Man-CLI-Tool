@@ -1,5 +1,5 @@
-from .models import WeatherReading, YearlyReport, MonthlyReport
-from . import report_generator
+from weatherman.models import WeatherReading, YearlyReport, MonthlyReport
+from weatherman import report_generator
 from typing import List
 
 

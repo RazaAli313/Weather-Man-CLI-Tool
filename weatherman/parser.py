@@ -1,6 +1,6 @@
 from pathlib import Path
-from .calculator import calculate
-from .models import WeatherReading
+from weatherman.calculator import calculate
+from weatherman.models import WeatherReading
 from typing import Optional, List
 
 
