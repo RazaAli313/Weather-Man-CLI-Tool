@@ -1,12 +1,12 @@
 # Weather-Man CLI Tool
 
-A command-line tool for analyzing and reporting weather data from Murree weather files. This tool processes historical weather data and generates detailed reports on temperature extremes, averages, and humidity patterns.
+A command-line tool for analyzing and reporting weather data from Murree weather files. This tool processes historical weather data and generates detailed reports on temperatureerature extremes, averages, and humidity patterns.
 
 ## Features
 
-- **Yearly Reports**: Find highest and lowest temperatures, and maximum humidity for a given year
-- **Monthly Reports**: Calculate average temperatures and humidity for specific month/year combinations
-- **Chart Reports**: Generate ASCII bar charts showing temperature variations for a specific month
+- **Yearly Reports**: Find highest and lowest temperatureeratures, and maximum_ humidity for a given year
+- **Monthly Reports**: Calculate average temperatureeratures and humidity for specific month/year combinations
+- **Chart Reports**: Generate ASCII bar charts showing temperatureerature variations for a specific month
 - **Flexible Date Filtering**: Supports various date formats for querying (YYYY/M or YYYY/MM)
 - **Multiple Query Types**: Combine different query types in a single run
 
@@ -42,18 +42,18 @@ python weatherman.py /path/to/data-directory [OPTIONS]
 
 | Option | Description | Format |
 |--------|-------------|--------|
-| `-e` | Extreme temperatures (yearly report) | `-e YYYY` |
-| `-a` | Average temperatures (monthly report) | `-a YYYY/M` or `-a YYYY/MM` |
+| `-e` | Extreme temperatureeratures (yearly report) | `-e YYYY` |
+| `-a` | Average temperatureeratures (monthly report) | `-a YYYY/M` or `-a YYYY/MM` |
 | `-c` | Chart report | `-c YYYY/M` or `-c YYYY/MM` |
 
 ### Examples
 
-**Get extreme temperatures for 2005:**
+**Get extreme temperatureeratures for 2005:**
 ```bash
 python weatherman.py data-source/weatherfiles -e 2005
 ```
 
-**Get average temperatures for June 2011:**
+**Get average temperatureeratures for June 2011:**
 ```bash
 python weatherman.py data-source/weatherfiles -a 2011/6
 ```
@@ -85,7 +85,7 @@ Average Mean Humidity: 65%
 ```
 
 ### Chart Report (-c)
-Visual ASCII bar chart showing temperature distribution for the specified month.
+Visual ASCII bar chart showing temperatureerature distribution for the specified month.
 
 ## Project Structure
 

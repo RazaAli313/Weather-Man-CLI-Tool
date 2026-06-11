@@ -2,13 +2,13 @@ from pathlib import Path
 from weatherman.weather_statistics_calculator import calculate
 from weatherman.constants import (
     DATE_INDEX,
-    MAX_TEMP_INDEX,
-    MEAN_TEMP_INDEX,
-    MIN_TEMP_INDEX,
-    MAX_HUMIDITY_INDEX,
+    MAXIMUM_TEMPERATURE_INDEX,
+    MEAN_TEMPERATURE_INDEX,
+    MINIMUM_TEMPERATURE_INDEX,
+    MAXIMUM_HUMIDITY_INDEX,
     MEAN_HUMIDITY_INDEX,
-    MIN_HUMIDITY_INDEX,
-    MIN_FIELD_COUNT,
+    MINIMUM_HUMIDITY_INDEX,
+    MINIMUM_FIELD_COUNT,
 )
 from weatherman.models import WeatherReading
 from typing import Optional, List
@@ -28,49 +28,39 @@ def _parse_optional_int(value: str) -> Optional[int]:
     return parsed_value
 
 
-def parse_weather_line(line: str) -> Optional[WeatherReading]:
-    """
-    Parse a single weather data line and return a WeatherReading object.
-    
-    Args:
-        line: A CSV line from weather file
-        
-    Returns:
-        WeatherReading object or None if parsing fails
-    """
-    parts = line.strip().split(',')
+def extract_weather_data(data: str) -> Optional[WeatherReading]:
+
+    parts = data.strip().split(',')
     reading = None
 
     if len(parts) >= MIN_FIELD_COUNT:
-        # Parse date (format: YYYY-M-D)
-        date_str = parts[DATE_INDEX]
-        date_parts = date_str.split('-')
+        
+        date = parts[DATE_INDEX]
+        date_parts = date.split('-')
         year = int(date_parts[0])
         month = int(date_parts[1])
         day = int(date_parts[2])
-
-        # Parse temperatures and humidity
-        max_temp = _parse_optional_int(parts[MAX_TEMP_INDEX])
-        mean_temp = _parse_optional_int(parts[MEAN_TEMP_INDEX])
-        min_temp = _parse_optional_int(parts[MIN_TEMP_INDEX])
-        max_humidity = _parse_optional_int(parts[MAX_HUMIDITY_INDEX])
+        
+        maximum_temperature = _parse_optional_int(parts[MAX_TEMP_INDEX])
+        mean_temperature = _parse_optional_int(parts[MEAN_TEMP_INDEX])
+        min_temperature = _parse_optional_int(parts[MIN_TEMP_INDEX])
+        maximum_humidity = _parse_optional_int(parts[MAX_HUMIDITY_INDEX])
         mean_humidity = _parse_optional_int(parts[MEAN_HUMIDITY_INDEX])
         min_humidity = _parse_optional_int(parts[MIN_HUMIDITY_INDEX])
-
-        reading = WeatherReading(
-            date=date_str,
-            day=day,
-            month=month,
-            year=year,
-            max_temp=max_temp,
-            mean_temp=mean_temp,
-            min_temp=min_temp,
-            max_humidity=max_humidity,
-            mean_humidity=mean_humidity,
-            min_humidity=min_humidity
+        
+        data for data in :lambda (int(data))
+        return WeatherReading(
+            date,
+            day,
+            month,
+            year,
+            maximum_temperature,
+            mean_temperature,
+            min_temperature,
+            maximum_humidity,
+            mean_humidity,
+            min_humidity
         )
-
-    return reading
 
 
 def _parse_year_month(year_month: str) -> tuple[str, Optional[int]]:
@@ -123,8 +113,8 @@ def _read_weather_file(file_path: Path) -> list[WeatherReading]:
     with open(file_path, 'r', encoding='utf-8') as file_handle:
         file_handle.readline()
 
-        for line in file_handle:
-            reading = parse_weather_line(line)
+        for data in file_handle:
+            reading = parse_weather_data(data)
             if reading:
                 readings.append(reading)
 
@@ -153,14 +143,7 @@ def _collect_readings(
 
 def parse(directory_path: str, argument_types: List[str], 
           year_months: List[str]) -> None:
-    """
-    Parse weather files and generate reports based on arguments.
     
-    Args:
-        directory_path: Path to weather files directory
-        argument_types: List of report type flags (-e, -a, -c)
-        year_months: List of year/month values corresponding to each flag
-    """
     base_path = Path(directory_path)
     files_by_year, files_by_year_month = _build_file_index(base_path)
     reports_count = min(len(argument_types), len(year_months))
@@ -169,7 +152,3 @@ def parse(directory_path: str, argument_types: List[str],
         file_readings = _collect_readings(files_by_year, files_by_year_month, year_months[index])
         if file_readings:
             calculate(file_readings, argument_types[index], year_months[index])
-
-
-
-

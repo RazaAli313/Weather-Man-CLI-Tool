@@ -2,8 +2,7 @@ import argparse
 
 
 class AppendPair(argparse.Action):
-    """Preserve the order of flag/value pairs as they are provided."""
-
+   
     def __call__(self, parser, namespace, year_month_values, flag=None):
         if not hasattr(namespace, "argument_types"):
             setattr(namespace, "argument_types", [])

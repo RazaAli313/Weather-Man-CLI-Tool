@@ -1,42 +1,31 @@
 from weatherman.models import WeatherReading, YearlyReport, MonthlyReport
 from weatherman import report_generator
-from weatherman.app_logger import logger
+from weatherman.logger import logger
 from typing import List
 
 
 def calculate_yearly_report(readings: list[WeatherReading], 
                            year: int) -> YearlyReport:
-    """
-    Calculate yearly weather statistics.
     
-    Args:
-        readings: List of WeatherReading objects
-        year: Target year
-        
-    Returns:
-        YearlyReport object with statistics
-    """
-    # Filter readings for the target year
     yearly_readings = [reading for reading in readings if reading.year == year]
-
     result = None
 
-    valid_max_temp_readings = [reading for reading in yearly_readings if reading.max_temp is not None]
-    valid_min_temp_readings = [reading for reading in yearly_readings if reading.min_temp is not None]
-    valid_max_humidity_readings = [reading for reading in yearly_readings if reading.max_humidity is not None]
+    maximum_temperature_readings = [reading for reading in yearly_readings if reading.maximum_temperature is not None]
+    min_temperature_readings = [reading for reading in yearly_readings if reading.min_temperature is not None]
+    maximum_humidity_readings = [reading for reading in yearly_readings if reading.maximum_humidity is not None]
 
-    if yearly_readings and valid_max_temp_readings and valid_min_temp_readings and valid_max_humidity_readings:
-        highest_temp_reading = max(valid_max_temp_readings, key=lambda reading: reading.max_temp)
-        lowest_temp_reading = min(valid_min_temp_readings, key=lambda reading: reading.min_temp)
-        max_humidity_reading = max(valid_max_humidity_readings, key=lambda reading: reading.max_humidity)
+    if yearly_readings and maximum_temperature_readings and min_temperature_readings and maximum_humidity_readings:
+        highest_temperature_reading = max(maximum_temperature_readings, key=lambda reading: reading.maximum_temperature)
+        lowest_temperature_reading = min(min_temperature_readings, key=lambda reading: reading.min_temperature)
+        maximum_humidity_reading = max(maximum_humidity_readings, key=lambda reading: reading.maximum_humidity)
 
         result = YearlyReport(
-            highest_temp=highest_temp_reading.max_temp,
-            highest_temp_day=highest_temp_reading.date,
-            lowest_temp=lowest_temp_reading.min_temp,
-            lowest_temp_day=lowest_temp_reading.date,
-            max_humidity=max_humidity_reading.max_humidity,
-            max_humidity_day=max_humidity_reading.date
+            highest_temperature=highest_temperature_reading.maximum_temperature,
+            highest_temperature_day=highest_temperature_reading.date,
+            lowest_temperature=lowest_temperature_reading.min_temperature,
+            lowest_temperature_day=lowest_temperature_reading.date,
+            maximum_humidity=maximum_humidity_reading.maximum_humidity,
+            maximum_humidity_day=maximum_humidity_reading.date
         )
 
     return result
@@ -44,31 +33,19 @@ def calculate_yearly_report(readings: list[WeatherReading],
 
 def calculate_monthly_report(readings: list[WeatherReading], 
                             year: int, month: int) -> MonthlyReport:
-    """
-    Calculate monthly weather statistics.
     
-    Args:
-        readings: List of WeatherReading objects
-        year: Target year
-        month: Target month
-        
-    Returns:
-        MonthlyReport object with statistics
-    """
-    # Filter readings for target month
     monthly_readings = [reading for reading in readings if reading.year == year and reading.month == month]
-
     result = None
 
-    valid_max_temps = [reading.max_temp for reading in monthly_readings if reading.max_temp is not None]
-    valid_min_temps = [reading.min_temp for reading in monthly_readings if reading.min_temp is not None]
-    valid_mean_humidity = [reading.mean_humidity for reading in monthly_readings if reading.mean_humidity is not None]
+    maximum_temperatures = [reading.maximum_temperature for reading in monthly_readings if reading.maximum_temperature is not None]
+    min_temperatures = [reading.min_temperature for reading in monthly_readings if reading.min_temperature is not None]
+    mean_humidity = [reading.mean_humidity for reading in monthly_readings if reading.mean_humidity is not None]
 
-    if monthly_readings and valid_max_temps and valid_min_temps and valid_mean_humidity:
+    if monthly_readings and maximum_temperatures and min_temperatures and mean_humidity:
         result = MonthlyReport(
-            avg_highest_temp=sum(valid_max_temps) / len(valid_max_temps),
-            avg_lowest_temp=sum(valid_min_temps) / len(valid_min_temps),
-            avg_mean_humidity=sum(valid_mean_humidity) / len(valid_mean_humidity),
+            avg_highest_temperature=sum(maximum_temperatures) / len(maximum_temperatures),
+            avg_lowest_temperature=sum(min_temperatures) / len(min_temperatures),
+            avg_mean_humidity=sum(mean_humidity) / len(mean_humidity),
             daily_readings=monthly_readings
         )
 
@@ -77,14 +54,7 @@ def calculate_monthly_report(readings: list[WeatherReading],
 
 def calculate(readings: List[WeatherReading], argument_type: str, 
               year_month: str) -> None:
-    """
-    Main calculator function that routes to appropriate report generator.
     
-    Args:
-        readings: List of WeatherReading objects
-        argument_type: Report type flag (-e, -a, or -c)
-        year_month: Year or month value
-    """
     def _parse_year_month(tl: str) -> tuple[int, int]:
         parts = tl.split('/')
         if len(parts) != 2:

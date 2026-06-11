@@ -1,4 +1,4 @@
-from weatherman.file_loader import load_directory
+from weatherman.loader import load_directory
 from weatherman.cli_parser import parse_cli_arguments
 
 
