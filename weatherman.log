@@ -1,0 +1,96 @@
+INFO:weatherman.app_logger:Highest: 38C on August 7
+INFO:weatherman.app_logger:Lowest: -3C on January 15
+INFO:weatherman.app_logger:Humidity: 100% on August 28
+INFO:weatherman.app_logger:Invalid yearly query: expected YYYY, got 2011/3
+INFO:weatherman.app_logger:March 2011
+INFO:weatherman.app_logger:01 [31m+++++[0m 5C
+INFO:weatherman.app_logger:01 [34m[0m 0C
+INFO:weatherman.app_logger:02 [31m++++[0m 4C
+INFO:weatherman.app_logger:02 [34m[0m 0C
+INFO:weatherman.app_logger:03 [31m++++++[0m 6C
+INFO:weatherman.app_logger:03 [34m[0m 0C
+INFO:weatherman.app_logger:04 [31m++++[0m 4C
+INFO:weatherman.app_logger:04 [34m[0m 0C
+INFO:weatherman.app_logger:05 [31m++++++[0m 6C
+INFO:weatherman.app_logger:05 [34m+++[0m 3C
+INFO:weatherman.app_logger:06 [31m+++++++++++++[0m 13C
+INFO:weatherman.app_logger:06 [34m++++[0m 4C
+INFO:weatherman.app_logger:07 [31m++++++++++++[0m 12C
+INFO:weatherman.app_logger:07 [34m++++++[0m 6C
+INFO:weatherman.app_logger:08 [31m+++++++++++++[0m 13C
+INFO:weatherman.app_logger:08 [34m+++++[0m 5C
+INFO:weatherman.app_logger:09 [31m+++++++++++++++[0m 15C
+INFO:weatherman.app_logger:09 [34m++++++[0m 6C
+INFO:weatherman.app_logger:10 [31m+++++++++++++++[0m 15C
+INFO:weatherman.app_logger:10 [34m++++++[0m 6C
+INFO:weatherman.app_logger:11 [31m++++++++++++++++[0m 16C
+INFO:weatherman.app_logger:11 [34m++++++++[0m 8C
+INFO:weatherman.app_logger:12 [31m+++++++++++++++++[0m 17C
+INFO:weatherman.app_logger:12 [34m++++++++++[0m 10C
+INFO:weatherman.app_logger:13 [31m++++++++++++++++++++++++++++++[0m 30C
+INFO:weatherman.app_logger:13 [34m++++++++++++[0m 12C
+INFO:weatherman.app_logger:14 [31m+++++++++++++++++++++[0m 21C
+INFO:weatherman.app_logger:14 [34m++++++++++++++[0m 14C
+INFO:weatherman.app_logger:15 [31m++++++++++++++++++++++[0m 22C
+INFO:weatherman.app_logger:15 [34m++++++++++++++++[0m 16C
+INFO:weatherman.app_logger:16 [31m+++++++++++++++++++++[0m 21C
+INFO:weatherman.app_logger:16 [34m+++++++++++++++[0m 15C
+INFO:weatherman.app_logger:17 [31m++++++++++++++++++[0m 18C
+INFO:weatherman.app_logger:17 [34m+++++++++++++[0m 13C
+INFO:weatherman.app_logger:18 [31m+++++++++++++++++++[0m 19C
+INFO:weatherman.app_logger:18 [34m+++++++++++++[0m 13C
+INFO:weatherman.app_logger:19 [31m++++++++++[0m 10C
+INFO:weatherman.app_logger:19 [34m++++++++[0m 8C
+INFO:weatherman.app_logger:20 [31m++++++++++++++[0m 14C
+INFO:weatherman.app_logger:20 [34m++++++[0m 6C
+INFO:weatherman.app_logger:21 [31m++++++++++++++++[0m 16C
+INFO:weatherman.app_logger:21 [34m++++++++[0m 8C
+INFO:weatherman.app_logger:22 [31m+++++++++++++++++++[0m 19C
+INFO:weatherman.app_logger:22 [34m++++++++++++[0m 12C
+INFO:weatherman.app_logger:23 [31m++++++++++++++++++++[0m 20C
+INFO:weatherman.app_logger:23 [34m+++++++++++++[0m 13C
+INFO:weatherman.app_logger:24 [31m+++++++++++++++++++++[0m 21C
+INFO:weatherman.app_logger:24 [34m++++++++++++++[0m 14C
+INFO:weatherman.app_logger:25 [31m++++++++++++++++++++++[0m 22C
+INFO:weatherman.app_logger:25 [34m++++++++++++++[0m 14C
+INFO:weatherman.app_logger:26 [31m+++++++++++++++++++++[0m 21C
+INFO:weatherman.app_logger:26 [34m+++++++++++++[0m 13C
+INFO:weatherman.app_logger:27 [31m++++++++++[0m 10C
+INFO:weatherman.app_logger:27 [34m++++++++[0m 8C
+INFO:weatherman.app_logger:28 [31m++++++++++++++[0m 14C
+INFO:weatherman.app_logger:28 [34m++++++++++++++[0m 14C
+INFO:weatherman.app_logger:29 [31m+++++++++++++++[0m 15C
+INFO:weatherman.app_logger:29 [34m+++++++++[0m 9C
+INFO:weatherman.app_logger:30 [31m+++++++++++++++++[0m 17C
+INFO:weatherman.app_logger:30 [34m++++++++[0m 8C
+INFO:weatherman.app_logger:March 2011
+INFO:weatherman.app_logger:01 [34m[0m[31m+++++[0m 0C - 5C
+INFO:weatherman.app_logger:02 [34m[0m[31m++++[0m 0C - 4C
+INFO:weatherman.app_logger:03 [34m[0m[31m++++++[0m 0C - 6C
+INFO:weatherman.app_logger:04 [34m[0m[31m++++[0m 0C - 4C
+INFO:weatherman.app_logger:05 [34m+++[0m[31m+++[0m 3C - 6C
+INFO:weatherman.app_logger:06 [34m++++[0m[31m+++++++++[0m 4C - 13C
+INFO:weatherman.app_logger:07 [34m++++++[0m[31m++++++[0m 6C - 12C
+INFO:weatherman.app_logger:08 [34m+++++[0m[31m++++++++[0m 5C - 13C
+INFO:weatherman.app_logger:09 [34m++++++[0m[31m+++++++++[0m 6C - 15C
+INFO:weatherman.app_logger:10 [34m++++++[0m[31m+++++++++[0m 6C - 15C
+INFO:weatherman.app_logger:11 [34m++++++++[0m[31m++++++++[0m 8C - 16C
+INFO:weatherman.app_logger:12 [34m++++++++++[0m[31m+++++++[0m 10C - 17C
+INFO:weatherman.app_logger:13 [34m++++++++++++[0m[31m++++++++++++++++++[0m 12C - 30C
+INFO:weatherman.app_logger:14 [34m++++++++++++++[0m[31m+++++++[0m 14C - 21C
+INFO:weatherman.app_logger:15 [34m++++++++++++++++[0m[31m++++++[0m 16C - 22C
+INFO:weatherman.app_logger:16 [34m+++++++++++++++[0m[31m++++++[0m 15C - 21C
+INFO:weatherman.app_logger:17 [34m+++++++++++++[0m[31m+++++[0m 13C - 18C
+INFO:weatherman.app_logger:18 [34m+++++++++++++[0m[31m++++++[0m 13C - 19C
+INFO:weatherman.app_logger:19 [34m++++++++[0m[31m++[0m 8C - 10C
+INFO:weatherman.app_logger:20 [34m++++++[0m[31m++++++++[0m 6C - 14C
+INFO:weatherman.app_logger:21 [34m++++++++[0m[31m++++++++[0m 8C - 16C
+INFO:weatherman.app_logger:22 [34m++++++++++++[0m[31m+++++++[0m 12C - 19C
+INFO:weatherman.app_logger:23 [34m+++++++++++++[0m[31m+++++++[0m 13C - 20C
+INFO:weatherman.app_logger:24 [34m++++++++++++++[0m[31m+++++++[0m 14C - 21C
+INFO:weatherman.app_logger:25 [34m++++++++++++++[0m[31m++++++++[0m 14C - 22C
+INFO:weatherman.app_logger:26 [34m+++++++++++++[0m[31m++++++++[0m 13C - 21C
+INFO:weatherman.app_logger:27 [34m++++++++[0m[31m++[0m 8C - 10C
+INFO:weatherman.app_logger:28 [34m++++++++++++++[0m[31m[0m 14C - 14C
+INFO:weatherman.app_logger:29 [34m+++++++++[0m[31m++++++[0m 9C - 15C
+INFO:weatherman.app_logger:30 [34m++++++++[0m[31m+++++++++[0m 8C - 17C

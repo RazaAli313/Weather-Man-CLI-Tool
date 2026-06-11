@@ -1,5 +1,5 @@
 from pathlib import Path
-from weatherman.calculator import calculate
+from weatherman.weather_statistics_calculator import calculate
 from weatherman.constants import (
     DATE_INDEX,
     MAX_TEMP_INDEX,

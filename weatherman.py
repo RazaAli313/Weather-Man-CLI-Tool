@@ -1,5 +1,5 @@
-from weatherman.loader import load_directory
-from weatherman.cli import parse_cli_arguments
+from weatherman.file_loader import load_directory
+from weatherman.cli_parser import parse_cli_arguments
 
 
 def main() -> None:
@@ -9,3 +9,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+gi

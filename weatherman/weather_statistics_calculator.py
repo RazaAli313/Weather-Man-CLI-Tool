@@ -99,23 +99,27 @@ def calculate(readings: List[WeatherReading], argument_type: str,
         else:
             logger.info(f"No data found for {year}/{month}")
 
-    
-        if argument_type == "-e":
+    if argument_type == "-e":
+        try:
             year = int(year_month)
-            report = calculate_yearly_report(readings, year)
-            if report:
-                report_generator.print_yearly_report(report)
-            else:
-                logger.info(f"No data found for year {year}")
+        except ValueError:
+            logger.info(f"Invalid yearly query: expected YYYY, got {year_month}")
+            return
 
-        elif argument_type in ("-a", "-c", "-b"):
-            action_map = {
-                "-a": report_generator.print_monthly_report,
-                "-c": report_generator.print_chart_report,
-                "-b": report_generator.print_combined_chart_report,
-            }
-            action_fn = action_map[argument_type]
-            _handle_monthly_action(readings, year_month, action_fn)
-
+        report = calculate_yearly_report(readings, year)
+        if report:
+            report_generator.print_yearly_report(report)
         else:
-            logger.info(f"Unknown argument type: {argument_type}")
+            logger.info(f"No data found for year {year}")
+
+    elif argument_type in ("-a", "-c", "-b"):
+        action_map = {
+            "-a": report_generator.print_monthly_report,
+            "-c": report_generator.print_chart_report,
+            "-b": report_generator.print_combined_chart_report,
+        }
+        action_fn = action_map[argument_type]
+        _handle_monthly_action(readings, year_month, action_fn)
+
+    else:
+        logger.info(f"Unknown argument type: {argument_type}")
