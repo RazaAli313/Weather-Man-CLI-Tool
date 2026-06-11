@@ -17,7 +17,7 @@ def calculate_yearly_report(readings: list[WeatherReading],
         YearlyReport object with statistics
     """
     # Filter readings for the target year
-    yearly_readings = [r for r in readings if r.year == year]
+    yearly_readings = [reading for reading in readings if reading.year == year]
 
     result = None
 
@@ -56,7 +56,7 @@ def calculate_monthly_report(readings: list[WeatherReading],
         MonthlyReport object with statistics
     """
     # Filter readings for target month
-    monthly_readings = [r for r in readings if r.year == year and r.month == month]
+    monthly_readings = [reading for reading in readings if reading.year == year and reading.month == month]
 
     result = None
 
@@ -118,4 +118,4 @@ def calculate(readings: List[WeatherReading], argument_type: str,
             _handle_monthly_action(readings, year_month, action_fn)
 
         else:
-            logger.info(f"Unknown argument type: {argument_type}"
+            logger.info(f"Unknown argument type: {argument_type}")
