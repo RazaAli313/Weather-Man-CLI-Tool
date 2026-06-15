@@ -4,6 +4,7 @@ from weatherman.file_parser import WeatherFileParser
 from weatherman.weather_statistics_calculator import WeatherCalculator
 from weatherman.report_generator import WeatherReportGenerator
 from weatherman.models import WeatherReading
+from weatherman.logger import logger
 
 class WeatherManApp:
     def __init__(self, directory_path: str) -> None:
@@ -47,9 +48,9 @@ class WeatherManApp:
                 if action:
                     action(weather_readings)
             else:
-                print("No weather data found.")
+                logger.info("No weather data found.")
         else:
-            print("No weather data found.")
+            logger.info("No weather data found.")
 
     def run(self, arguments_types: List[str], year_months: List[str]) -> None:
         for argument, argument_type in zip(year_months, arguments_types):
