@@ -21,23 +21,19 @@ class WeatherManApp:
 
     def handle_yearly_report(self, weather_readings: List[WeatherReading]) -> None:
         yearly_report = self.calculator.calculate_yearly_statistics(weather_readings)
-        if yearly_report:
-            self.reporter.generate_yearly_report(yearly_report)
+        self.reporter.generate_yearly_report(yearly_report)
 
     def handle_monthly_report(self, weather_readings: List[WeatherReading]) -> None:
         monthly_report = self.calculator.calculate_monthly_statistics(weather_readings)
-        if monthly_report:
-            self.reporter.generate_monthly_report(monthly_report)
+        self.reporter.generate_monthly_report(monthly_report)
 
     def handle_bar_chart_report(self, weather_readings: List[WeatherReading]) -> None:
         monthly_report = self.calculator.calculate_monthly_statistics(weather_readings)
-        if monthly_report:
-            self.reporter.generate_bar_chart(monthly_report)
+        self.reporter.generate_bar_chart(monthly_report)
 
     def handle_combined_chart_report(self, weather_readings: List[WeatherReading]) -> None:
         monthly_report = self.calculator.calculate_monthly_statistics(weather_readings)
-        if monthly_report:
-            self.reporter.generate_combined_bar_chart(monthly_report)
+        self.reporter.generate_combined_bar_chart(monthly_report)
 
     def process_arguments(self, argument: str, argument_type: str) -> None:
         files_matched = self.loader.load_matching_files(argument)

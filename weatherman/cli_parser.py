@@ -36,7 +36,7 @@ def parse_cli_arguments() -> DirectoryLoader:
     year_months = getattr(args, "year_months", [])
 
     if not arguments_types or not year_months:
-        parser.logger.info_help()
+        parser.print_help()
         raise SystemExit(1)
     arguments=DirectoryLoader(args.directory_path, arguments_types, year_months)
     return arguments

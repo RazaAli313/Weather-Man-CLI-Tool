@@ -43,3 +43,14 @@ class DirectoryLoader:
     arguments_types: list[str]
     year_months: list[str]
     
+@dataclass
+class Date:
+    year:str=None
+    month:str=None
+    day:int=None
+
+@dataclass
+class Temperature:
+    minimum_temperature:int
+    maximum_temperature:int
+    

@@ -2,18 +2,16 @@ import re
 import calendar
 from typing import List, Optional
 from weatherman.models import WeatherReading, YearlyReport, MonthlyReport
+from weatherman.constants import Regex
+from weatherman.utils import format_date_to_month_day
+from weatherman.models import Date
+
+def concatenate_month_day(date: Date) -> str:
+    formatted_date = f"{date.month} {date.day}"
+    return formatted_date
+
 
 class WeatherCalculator:
-    def format_date_to_month_day(self, date_str: str) -> str:
-        formatted_date = date_str
-        date_match = re.match(r"^(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2})$", date_str)
-        if date_match:
-            month_index = int(date_match.group('month'))
-            day_number = int(date_match.group('day'))
-            if 1 <= month_index <= 12:
-                month_name = calendar.month_name[month_index]
-                formatted_date = f"{month_name} {day_number}"
-        return formatted_date
 
     def calculate_yearly_statistics(self, readings: List[WeatherReading]) -> Optional[YearlyReport]:
         report = None
@@ -24,15 +22,15 @@ class WeatherCalculator:
         if readings_with_maximum_temperature and readings_with_minimum_temperature and readings_with_maximum_humidity:
             highest_temperature_reading = max(readings_with_maximum_temperature, key=lambda reading: reading.maximum_temperature)
             highest_temperature = highest_temperature_reading.maximum_temperature
-            highest_temperature_day = self.format_date_to_month_day(highest_temperature_reading.date)
+            highest_temperature_day = concatenate_month_day(format_date_to_month_day(highest_temperature_reading.date,Regex.YearMonthDay))
 
             lowest_temperature_reading = min(readings_with_minimum_temperature, key=lambda reading: reading.min_temperature)
             lowest_temperature = lowest_temperature_reading.min_temperature
-            lowest_temperature_day = self.format_date_to_month_day(lowest_temperature_reading.date)
+            lowest_temperature_day = concatenate_month_day(format_date_to_month_day(lowest_temperature_reading.date,Regex.YearMonthDay))
 
             maximum_humidity_reading = max(readings_with_maximum_humidity, key=lambda reading: reading.maximum_humidity)
             maximum_humidity = maximum_humidity_reading.maximum_humidity
-            maximum_humidity_day = self.format_date_to_month_day(maximum_humidity_reading.date)
+            maximum_humidity_day = concatenate_month_day(format_date_to_month_day(maximum_humidity_reading.date,Regex.YearMonthDay))
 
             report = YearlyReport(
                 highest_temperature=highest_temperature,
@@ -62,4 +60,3 @@ class WeatherCalculator:
                 daily_readings=readings
             )
         return report
-        
