@@ -1,5 +1,5 @@
 import argparse
-
+from weatherman.models import DirectoryLoader
 
 class AppendPair(argparse.Action):
    
@@ -28,15 +28,15 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def parse_cli_arguments() -> tuple[str, list[str], list[str]]:
+def parse_cli_arguments() -> DirectoryLoader:
     parser = build_parser()
     args = parser.parse_args()
-
-    argument_types = getattr(args, "argument_types", [])
+    
+    arguments_types = getattr(args, "argument_types", [])
     year_months = getattr(args, "year_months", [])
 
-    if not argument_types or not year_months:
-        parser.print_help()
+    if not arguments_types or not year_months:
+        parser.logger.info_help()
         raise SystemExit(1)
-
-    return args.directory_path, argument_types, year_months
+    arguments=DirectoryLoader(args.directory_path, arguments_types, year_months)
+    return arguments

@@ -1,11 +1,10 @@
-from weatherman.loader import load_directory
 from weatherman.cli_parser import parse_cli_arguments
-
+from weatherman.app import WeatherManApp
 
 def main() -> None:
-    """Main entry point that delegates CLI parsing and directory loading."""
-    directory_path, argument_types, year_months = parse_cli_arguments()
-    load_directory(directory_path, argument_types, year_months)
+    arguments = parse_cli_arguments()
+    app = WeatherManApp(arguments.directory_path)
+    app.run(arguments.arguments_types, arguments.year_months)
 
 if __name__ == "__main__":
     main()

@@ -1,73 +1,66 @@
+import calendar
 from weatherman.models import YearlyReport, MonthlyReport
-from weatherman.logger import logger
 from weatherman.constants import Color
+from weatherman.logger import logger
 
+class WeatherReportGenerator:
+    def format_value(self, value_to_format: int) -> str:
+        formatted_value_string = str(value_to_format)
+        if 0 <= value_to_format < 10:
+            formatted_value_string = f"{value_to_format:02d}"
+        return formatted_value_string
 
-def print_yearly_report(report: YearlyReport) -> None:
-    
-    highest_date = report.highest_temperature_day.split('-')
-    highest_day = int(highest_date[2])
-    highest_month = get_month_name(int(highest_date[1]))
-    
-    lowest_date = report.lowest_temperature_day.split('-')
-    lowest_day = int(lowest_date[2])
-    lowest_month = get_month_name(int(lowest_date[1]))
-    
-    humidity_date = report.maximum_humidity_day.split('-')
-    humidity_day = int(humidity_date[2])
-    humidity_month = get_month_name(int(humidity_date[1]))
-    
-    logger.info(f"Highest: {report.highest_temperature}C on {highest_month} {highest_day}")
-    logger.info(f"Lowest: {report.lowest_temperature}C on {lowest_month} {lowest_day}")
-    logger.info(f"Humidity: {report.maximum_humidity}% on {humidity_month} {humidity_day}")
+    def generate_yearly_report(self, report: YearlyReport) -> None:
+        logger.info(f"Highest: {self.format_value(report.highest_temperature)}C on {report.highest_temperature_day}")
+        logger.info(f"Lowest: {self.format_value(report.lowest_temperature)}C on {report.lowest_temperature_day}")
+        logger.info(f"Humidity: {self.format_value(report.maximum_humidity)}% on {report.maximum_humidity_day}")
 
+    def generate_monthly_report(self, report: MonthlyReport) -> None:
+        highest_average = round(report.average_highest_temperature)
+        lowest_average = round(report.average_lowest_temperature)
+        mean_humidity_average = round(report.average_mean_humidity)
 
-def print_monthly_report(report: MonthlyReport, year: int, month: int) -> None:
-    
-    logger.info(f"Highest Average: {int(report.avg_highest_temperature)}C")
-    logger.info(f"Lowest Average: {int(report.avg_lowest_temperature)}C")
-    logger.info(f"Average Mean Humidity: {int(report.avg_mean_humidity)}%")
+        logger.info(f"Highest Average: {self.format_value(highest_average)}C")
+        logger.info(f"Lowest Average: {self.format_value(lowest_average)}C")
+        logger.info(f"Average Mean Humidity: {self.format_value(mean_humidity_average)}%")
 
+    def generate_bar_chart(self, report: MonthlyReport) -> None:
+        first_reading = next(iter(report.daily_readings), None)
+        if first_reading:
+            month_name = calendar.month_name[first_reading.month]
+            logger.info(f"{month_name} {first_reading.year}")
 
-def print_chart_report(report: MonthlyReport, year: int, month: int) -> None:
-    
-    month_name = get_month_name(month)
-    logger.info(f"{month_name} {year}")
-    
-    sorted_readings = sorted(report.daily_readings, key=lambda r: r.day)
-    
-    for reading in sorted_readings:
-        if reading.maximum_temperature is not None and reading.min_temperature is not None:
-            day_str = f"{reading.day:02d}"
+            for reading in report.daily_readings:
+                if reading.maximum_temperature is not None and reading.min_temperature is not None:
+                    day_str = f"{reading.day:02d}"
+                    maximum_temperature = reading.maximum_temperature
+                    maximum_temperature_bar = "+" * max(0, maximum_temperature)
+                    maximum_temperature_string = f"{self.format_value(maximum_temperature)}C"
+                    logger.info(f"{Color.RED.value}{day_str} {maximum_temperature_bar} {maximum_temperature_string}{Color.RESET.value}")
 
-            high_bar = "+" * max(0, reading.maximum_temperature)
-            logger.info(f"{day_str} {Color.RED.value}{high_bar}{Color.RESET.value} {reading.maximum_temperature}C")
+                    minimum_temperature = reading.min_temperature
+                    minimum_temperature_bar = "+" * max(0, minimum_temperature)
+                    minimum_temperature_string = f"{self.format_value(minimum_temperature)}C"
+                    logger.info(f"{Color.BLUE.value}{day_str} {minimum_temperature_bar} {minimum_temperature_string}{Color.RESET.value}")
 
-            low_bar = "+" * max(0, reading.min_temperature)
-            logger.info(f"{day_str} {Color.BLUE.value}{low_bar}{Color.RESET.value} {reading.min_temperature}C")
+    def generate_combined_bar_chart(self, report: MonthlyReport) -> None:
+        first_reading = next(iter(report.daily_readings), None)
+        if first_reading:
+            month_name = calendar.month_name[first_reading.month]
+            logger.info(f"{month_name} {first_reading.year}")
 
+            for reading in report.daily_readings:
+                if reading.maximum_temperature is not None and reading.min_temperature is not None:
+                    day_str = f"{reading.day:02d}"
+                    minimum_temperature = reading.min_temperature
+                    maximum_temperature = reading.maximum_temperature
 
-def print_combined_chart_report(report: MonthlyReport, year: int, month: int) -> None:
-    
-    month_name = get_month_name(month)
-    logger.info(f"{month_name} {year}")
-    sorted_readings = sorted(report.daily_readings, key=lambda r: r.day)
-    
-    for reading in sorted_readings:
-        if reading.maximum_temperature is not None and reading.min_temperature is not None:
-            day_str = f"{reading.day:02d}"
-            min_val = max(0, reading.min_temperature)
-            maximum_val = max(0, reading.maximum_temperature)
-            blue_bar = "+" * min_val
-            red_bar = "+" * max(0, maximum_val - min_val)
+                    minimum_temperature_count = max(0, minimum_temperature)
+                    maximum_temperature_count = max(0, maximum_temperature)
 
-            logger.info(f"{day_str} {Color.BLUE.value}{blue_bar}{Color.RESET.value}{Color.RED.value}{red_bar}{Color.RESET.value} {min_val}C - {maximum_val}C")
+                    blue_bar = f"{Color.BLUE.value}{'+' * minimum_temperature_count}"
+                    red_bar = f"{Color.RED.value}{'+' * maximum_temperature_count}"
+                    color_reset_code = Color.RESET.value
 
-
-def get_month_name(month: int) -> str:
-    
-    months = [
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    ]
-    return months[month - 1] if 1 <= month <= 12 else "Unknown"
+                    value_string = f"{self.format_value(minimum_temperature)}C - {self.format_value(maximum_temperature)}C"
+                    logger.info(f"{day_str} {blue_bar}{red_bar}{color_reset_code} {value_string}")
