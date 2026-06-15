@@ -9,8 +9,9 @@ def process_row_date(row_data: dict, date_key: str) -> Optional[re.Match]:
     date_str = row_data.get(date_key, "")
     if not date_str:
         return None
-    pattern = Regex.YearMonthDay.value
-    return re.match(pattern, date_str)
+    compiled_pattern = re.compile(Regex.YearMonthDay.value)
+    return compiled_pattern.match(date_str)
+
 
 def parse_readings(row_data: dict) -> dict:
     target_fields = [
@@ -29,6 +30,8 @@ def parse_readings(row_data: dict) -> dict:
 
 
 class WeatherFileParser:
+
+    
     def parse_files(self, files_matched: List) -> List[WeatherReading]:
         readings: List[WeatherReading] = []
 
@@ -41,7 +44,7 @@ class WeatherFileParser:
                     continue
 
                 for row in reader:
-                    row_data = {key.strip(): value.strip() for key, value in row.items() if k is not None and v is not None}
+                    row_data = {key.strip(): value.strip() for key, value in row.items() if key is not None and value is not None}
                     
                     date_match = process_row_date(row_data, date_key)
                     if not date_match:

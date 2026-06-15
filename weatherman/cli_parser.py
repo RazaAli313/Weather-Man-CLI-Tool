@@ -1,8 +1,10 @@
 import argparse
 from weatherman.models import DirectoryLoader
 
+
 class AppendPair(argparse.Action):
    
+
     def __call__(self, parser, namespace, year_month_values, flag=None):
         if not hasattr(namespace, "argument_types"):
             setattr(namespace, "argument_types", [])
@@ -31,10 +33,8 @@ def build_parser() -> argparse.ArgumentParser:
 def parse_cli_arguments() -> DirectoryLoader:
     parser = build_parser()
     args = parser.parse_args()
-    
     arguments_types = getattr(args, "argument_types", [])
     year_months = getattr(args, "year_months", [])
-
     if not arguments_types or not year_months:
         parser.print_help()
         raise SystemExit(1)

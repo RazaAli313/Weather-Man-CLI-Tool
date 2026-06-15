@@ -6,12 +6,14 @@ from weatherman.constants import Regex
 from weatherman.utils import format_date_to_month_day
 from weatherman.models import Date
 
+
 def concatenate_month_day(date: Date) -> str:
     formatted_date = f"{date.month} {date.day}"
     return formatted_date
 
 
 class WeatherCalculator:
+
 
     def calculate_yearly_statistics(self, readings: List[WeatherReading]) -> Optional[YearlyReport]:
         report = None
@@ -41,6 +43,7 @@ class WeatherCalculator:
                 maximum_humidity_day=maximum_humidity_day
             )
         return report
+
 
     def calculate_monthly_statistics(self, readings: List[WeatherReading]) -> Optional[MonthlyReport]:
         report = None
