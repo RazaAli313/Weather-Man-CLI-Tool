@@ -65,3 +65,4 @@ class WeatherFileParser:
 
         readings.sort(key=lambda reading: (reading.year, reading.month, reading.day))
         return readings
+        

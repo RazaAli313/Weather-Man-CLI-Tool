@@ -62,3 +62,4 @@ class WeatherCalculator:
                 daily_readings=readings
             )
         return report
+        

@@ -43,4 +43,3 @@ class DirectoryLoader:
     arguments_types: list[str]
     year_months: list[str]
     
-
