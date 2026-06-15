@@ -25,11 +25,6 @@ A command-line tool for analyzing and reporting weather data from Murree weather
    cd Weather-Man-CLI-Tool
    ```
 
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
 ## Usage
 
 The tool accepts command-line arguments in the format:
@@ -45,6 +40,8 @@ python weatherman.py /path/to/data-directory [OPTIONS]
 | `-e` | Extreme temperatureeratures (yearly report) | `-e YYYY` |
 | `-a` | Average temperatureeratures (monthly report) | `-a YYYY/M` or `-a YYYY/MM` |
 | `-c` | Chart report | `-c YYYY/M` or `-c YYYY/MM` |
+| `-b` | Double Horizontal Bar report | `-b YYYY/M`
+
 
 ### Examples
 
@@ -63,6 +60,10 @@ python weatherman.py data-source/weatherfiles -a 2011/6
 python weatherman.py data-source/weatherfiles -c 2011/3
 ```
 
+**Double Horizontal Bars:**
+```bash
+python weatherman.py data-source/weatherfiles -b 2011/03
+```
 **Combine multiple queries:**
 ```bash
 python weatherman.py data-source/weatherfiles -c 2011/03 -a 2011/3 -e 2011
@@ -92,17 +93,22 @@ Visual ASCII bar chart showing temperatureerature distribution for the specified
 ```
 Weather-Man-CLI-Tool/
 ├── README.md                 # Project documentation
-├── requirements.txt          # Python dependencies
 ├── weatherman.py            # Main entry point
+├──.gitignore
 ├── data-source/
 │   └── weatherfiles/        # Historical weather data files
 └── weatherman/              # Main package
     ├── __init__.py
     ├── models.py            # Data structures (WeatherReading, Reports)
-    ├── parser.py            # Weather data parsing logic
-    ├── calculator.py        # Report calculations
+    ├── file_parser.py       # Weather data parsing logic
+    ├──cli_parser.py         #CLI parser logic  
+    ├── weather_statistics_calculator.py        # Report calculations
     ├── loader.py            # File directory loading
+    ├──constants.py          # File having enum of colors for console
+    ├──app.py                # WeatherMan Class
+    ├──logger.py             # Logger
     └── report_generator.py   # Report formatting and display
+    
 ```
 
 ## Data Format
@@ -131,10 +137,6 @@ The tool validates:
 - Valid date ranges in input files
 
 If errors occur, the tool will display helpful error messages.
-
-## Requirements
-
-See [requirements.txt](requirements.txt) for full list of dependencies.
 
 ## License
 
