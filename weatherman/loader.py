@@ -7,7 +7,7 @@ class WeatherDirectoryLoader:
     def __init__(self, directory_path: str) -> None:
         self.base_path = Path(directory_path)
 
-    def find_matching_files(self, argument: str) -> List[Path]:
+    def load_matching_files(self, argument: str) -> List[Path]:
         files_matched = []
         match = re.match(r"^(?P<year>\d{4})(?:/(?P<month>\d{1,2}))?$", argument)
         if match:

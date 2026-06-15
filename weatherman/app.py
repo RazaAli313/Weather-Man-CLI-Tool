@@ -38,8 +38,8 @@ class WeatherManApp:
         if monthly_report:
             self.reporter.generate_combined_bar_chart(monthly_report)
 
-    def execute_report(self, argument: str, argument_type: str) -> None:
-        files_matched = self.loader.find_matching_files(argument)
+    def process_arguments(self, argument: str, argument_type: str) -> None:
+        files_matched = self.loader.load_matching_files(argument)
         if files_matched:
             weather_readings = self.parser.parse_files(files_matched)
             if weather_readings:
@@ -53,4 +53,4 @@ class WeatherManApp:
 
     def run(self, arguments_types: List[str], year_months: List[str]) -> None:
         for argument, argument_type in zip(year_months, arguments_types):
-            self.execute_report(argument, argument_type)
+            self.process_arguments(argument, argument_type)
