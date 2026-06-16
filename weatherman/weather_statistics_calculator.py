@@ -4,10 +4,14 @@ from typing import List, Optional
 from weatherman.models import WeatherReading, YearlyReport, MonthlyReport
 from weatherman.utils import format_date_to_month_day
 from weatherman.models import Date
-from weatherman.constants import YearMonthDayPattern
+from weatherman.constants import YEAR_MONTH_DAY_PATTERN
 
 class WeatherCalculator:
     def calculate_yearly_statistics(self, readings: List[WeatherReading]) -> Optional[YearlyReport]:
+        concatenate_month_day=lambda reading:f"{date.month} {date.day}" if(
+            date:=format_date_to_month_day(reading.date,YEAR_MONTH_DAY_PATTERN)
+        
+           ) else ""
         report = None
         readings_with_maximum_temperature = [reading for reading in readings if reading.maximum_temperature is not None]
         readings_with_minimum_temperature = [reading for reading in readings if reading.min_temperature is not None]
@@ -23,10 +27,6 @@ class WeatherCalculator:
 
             maximum_humidity_reading = max(readings_with_maximum_humidity, key=lambda reading: reading.maximum_humidity)
             maximum_humidity = maximum_humidity_reading.maximum_humidity
-            concatenate_month_day=lambda reading:f"{date.month} {date.day}" if(
-        date:=format_date_to_month_day(reading.date,YearMonthDayPattern)
-        
-           ) else ""
             highest_temperature_day=concatenate_month_day(highest_temperature_reading)
             lowest_temperature_day=concatenate_month_day(lowest_temperature_reading)
             maximum_humidity_day=concatenate_month_day(maximum_humidity_reading)

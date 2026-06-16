@@ -2,13 +2,13 @@ import csv
 import re
 from typing import List, Optional
 from weatherman.models import WeatherReading
-from weatherman.constants import YearMonthDayPattern
+from weatherman.constants import YEAR_MONTH_DAY_PATTERN
 
 
 class WeatherFileParser:
     def _process_row_date(self,row_data: dict, date_key: str) -> Optional[re.Match]:
         date_str = row_data.get(date_key, "")
-        compiled_pattern = re.compile(YearMonthDayPattern)
+        compiled_pattern = re.compile(YEAR_MONTH_DAY_PATTERN)
         return compiled_pattern.match(date_str)
 
     def _parse_readings(self,row_data: dict) -> dict:
