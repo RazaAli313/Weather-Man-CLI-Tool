@@ -3,8 +3,6 @@ from weatherman.models import DirectoryLoader
 
 
 class AppendPair(argparse.Action):
-   
-
     def __call__(self, parser, namespace, year_month_values, flag=None):
         if not hasattr(namespace, "argument_types"):
             setattr(namespace, "argument_types", [])
@@ -12,7 +10,6 @@ class AppendPair(argparse.Action):
 
         namespace.argument_types.append(flag)
         namespace.year_months.append(year_month_values)
-
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
@@ -28,7 +25,6 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("-b", metavar="YEAR/MONTH", action=AppendPair, help="Combined chart report for YEAR/MONTH")
 
     return parser
-
 
 def parse_cli_arguments() -> DirectoryLoader:
     parser = build_parser()

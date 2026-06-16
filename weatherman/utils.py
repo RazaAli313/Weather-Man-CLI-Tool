@@ -1,14 +1,13 @@
 import re
 import calendar
 from weatherman.models import Date
-from weatherman.constants import Regex
 
 
-def format_date_to_month_day(date_str: str, regex_pattern: Regex) -> Date:
+def format_date_to_month_day(date_str: str, regex_pattern) -> Date:
     date = Date()
-    compiled_pattern = re.compile(regex_pattern.value)
+    compiled_pattern = re.compile(regex_pattern)
     date_match = compiled_pattern.match(date_str)
-    
+
     if date_match:
         if 'year' in date_match.groupdict() and date_match.group('year'):
             date.year = date_match.group('year')
